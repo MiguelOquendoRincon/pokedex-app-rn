@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
+import { PokemonDetailScreen } from '../../features/pokedex/screens/PokemonDetailScreen';
 import { TabsNavigator } from './TabsNavigator';
 
 // Definimos los parámetros de cada pantalla
@@ -14,7 +15,7 @@ export const RootNavigator = () => {
     return (
         <Stack.Navigator>
             <Stack.Screen name="Tabs" component={TabsNavigator} options={{ headerShown: false }} />
-            {/* <Stack.Screen name="PokemonDetail" component={PokemonDetailScreen} options={{ headerShown: false }} /> */}
+            <Stack.Screen name="PokemonDetail" component={PokemonDetailScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
     );
 };

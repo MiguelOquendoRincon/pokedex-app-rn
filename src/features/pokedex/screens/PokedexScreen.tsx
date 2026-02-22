@@ -1,9 +1,16 @@
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useMemo } from "react";
 import { ActivityIndicator, FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import type { RootStackParamList } from "../../../app/navigation/RootNavigator";
+import { PokemonCard } from "../components/PokemonCard";
 import { usePokemonList } from "../hooks/usePokemonList";
 
 // Pantalla principal de la Pokédex
 export const PokedexScreen = () => {
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
     // Hook para obtener una lista infinita de pokemons
     const {
         data,
@@ -23,40 +30,44 @@ export const PokedexScreen = () => {
     // Si está cargando, mostramos un indicador de carga
     if (isLoading) {
         return (
-            <View style={styles.center}>
+            <SafeAreaView style={styles.center}>
                 <ActivityIndicator />
                 <Text style={styles.muted}>Loading Pokédex...</Text>
-            </View>
+            </SafeAreaView>
         )
     }
 
     // Si hay un error, mostramos un mensaje de error
     if (isError) {
         return (
-            <View style={styles.center}>
+            <SafeAreaView style={styles.center}>
                 <Text style={styles.errorText}>Error al cargar los pokemons</Text>
                 <Pressable style={styles.retryButton} onPress={() => refetch()}>
                     <Text style={styles.retryButtonText}>Reintentar</Text>
                 </Pressable>
-            </View>
+            </SafeAreaView>
         )
     }
 
     // Renderizamos la lista de pokemons
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Pokédex</Text>
+        <SafeAreaView style={styles.container} edges={["top", "left", "right"]}>
+            <View style={styles.header}>
+                <Text style={styles.title}>Pokédex</Text>
+            </View>
 
             <FlatList
                 data={items}
                 keyExtractor={(item) => String(item.id)}
+                showsVerticalScrollIndicator={true}
                 contentContainerStyle={styles.list}
+                ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
                 renderItem={({ item }) => (
-                    <View style={styles.card}>
-                        <Text style={styles.cardTitle}>
-                            #{String(item.id).padStart(3, "0")} • {capitalize(item.name)}
-                        </Text>
-                    </View>
+                    <PokemonCard
+                        id={item.id}
+                        name={item.name}
+                        onPress={() => navigation.navigate("PokemonDetail", { id: String(item.id) })}
+                    />
                 )}
                 onEndReached={() => {
                     if (hasNextPage && !isFetchingNextPage) fetchNextPage();
@@ -71,7 +82,7 @@ export const PokedexScreen = () => {
                     ) : null
                 }
             />
-        </View>
+        </SafeAreaView>
     );
 }
 
@@ -85,13 +96,18 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#f5f5f5",
     },
+    header: {
+        backgroundColor: "#f5f5f5",
+    },
     title: {
         fontSize: 28,
         fontWeight: "bold",
-        margin: 16,
+        marginHorizontal: 16,
+        marginVertical: 8,
     },
     list: {
         paddingHorizontal: 16,
+        paddingBottom: 20,
     },
     card: {
         backgroundColor: "#fff",
@@ -122,6 +138,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
+        backgroundColor: "#f5f5f5",
     },
     errorText: {
         color: "#d63031",
