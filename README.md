@@ -1,50 +1,75 @@
-# Welcome to your Expo app 👋
+# Pokédex App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A modern, high-performance Pokédex application built with **React Native** and **Expo**. This app demonstrates a robust architecture using feature-based modularity, infinite scrolling, and global state management.
 
-## Get started
+## 🚀 Key Features
 
-1. Install dependencies
+- **Infinite Scrolling Pokédex**: Seamlessly explore all Pokémon with optimized list rendering and infinite pagination powered by `@tanstack/react-query`.
+- **Modern Navigation**: Implementation of `react-navigation` with a Root Stack and Bottom Tab navigation.
+- **Global State Management**: Lightweight and fast state handling using `Zustand`.
+- **Modular Architecture**: Organized by features (`src/features`) to ensure scalability and maintainability.
+- **Type Safety**: Fully written in TypeScript for a better developer experience and reduced runtime errors.
+- **REST API Integration**: Clean integration with the [PokéAPI](https://pokeapi.co/).
 
+## 🛠️ Tech Stack
+
+- **Framework**: [Expo](https://expo.dev/) / [React Native](https://reactnative.dev/)
+- **State Management**: [Zustand](https://github.com/pmndrs/zustand)
+- **Data Fetching**: [React Query (TanStack)](https://tanstack.com/query/latest)
+- **Navigation**: [React Navigation](https://reactnavigation.org/)
+- **Language**: TypeScript
+
+## 📁 Project Structure
+
+```text
+src/
+├── app/                # Global configuration and providers
+│   ├── navigation/     # Navigators (Root, Tabs)
+│   └── providers/      # App-wide providers (QueryClient, SafeArea, etc.)
+├── features/           # Feature-based modules
+│   ├── pokedex/        # Pokedex list and details logic
+│   ├── favorites/      # User favorites management
+│   └── settings/       # User preferences and theme
+├── shared/             # Shared components, hooks, and utilities
+│   ├── store/          # Shared Zustand stores
+│   └── ui/             # Reusable UI components
+└── index.js            # Entry point
+```
+
+## 🏁 Getting Started
+
+### Prerequisites
+
+- Node.js (Latest LTS recommended)
+- npm or yarn
+- Expo Go app on your mobile device (for testing)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd pokedex-app
+   ```
+
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-2. Start the app
-
+3. Start the development server:
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+## 📱 Development Workflow
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+The project follows a **Sprint-based** development approach. The first sprint focused on:
+- Project structure setup.
+- Navigation implementation.
+- Pokedex infinite scroll list integration.
+- API layer and error handling.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 📄 License
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+This project is open-source and available under the MIT License.
