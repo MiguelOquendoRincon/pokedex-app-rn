@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Image } from "expo-image";
 import React, { memo, useCallback } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useAppStore } from "../../../shared/store/appStore";
 import { pokemonDetailKey } from "../hooks/usePokemonDetail";
 import { getPokemonDetail } from "../services/pokemonDetailService";
 
@@ -11,11 +12,12 @@ type Props = {
     onPress: () => void;
 };
 
-const blurhash =
-    "|rF?hV%2WCj[ayj[ayay~qj[ayj[ayj["; // placeholder simple
+const blurhash = "|rF?hV%2WCj[ayj[ayay~qj[ayj[ayj[";
 
 export const PokemonCard = memo(function PokemonCard({ id, name, onPress }: Props) {
     const queryClient = useQueryClient();
+    const toggleFavorite = useAppStore((s) => s.toggleFavorite);
+    const isFavorite = useAppStore((s) => s.isFavorite(id));
 
     const idOrName = String(id);
 
@@ -25,7 +27,7 @@ export const PokemonCard = memo(function PokemonCard({ id, name, onPress }: Prop
             queryFn: ({ signal }) => getPokemonDetail({ id: id.toString(), signal }),
             staleTime: 1000 * 60 * 10,
         });
-    }, [id, queryClient]);
+    }, [idOrName, queryClient]);
 
     return (
         <Pressable
@@ -38,7 +40,18 @@ export const PokemonCard = memo(function PokemonCard({ id, name, onPress }: Prop
                     <Text style={styles.title}>
                         #{String(id).padStart(3, "0")} • {capitalize(name)}
                     </Text>
-                    <Text style={styles.subtitle}>Tap to view details</Text>
+
+                    <View style={styles.actionsRow}>
+                        <Text style={styles.subtitle}>Tap to view details</Text>
+
+                        <Pressable
+                            onPress={() => toggleFavorite(id)}
+                            hitSlop={10}
+                            style={({ pressed }) => [styles.favBtn, pressed && { opacity: 0.7 }]}
+                        >
+                            <Text style={styles.favText}>{isFavorite ? "★" : "☆"}</Text>
+                        </Pressable>
+                    </View>
                 </View>
 
                 <Image
@@ -62,13 +75,16 @@ const styles = StyleSheet.create({
     card: {
         padding: 14,
         borderRadius: 16,
-        backgroundColor: "rgba(255,255,255,0.08)",
+        backgroundColor: "#F2F2F2",
         borderWidth: 1,
-        borderColor: "rgba(255,255,255,0.12)",
+        borderColor: "#E0E0E0",
     },
-    pressed: { transform: [{ scale: 0.98 }], opacity: 0.95 },
+    pressed: { transform: [{ scale: 0.98 }], opacity: 0.8 },
     row: { flexDirection: "row", alignItems: "center", gap: 12 },
-    title: { fontSize: 16, fontWeight: "800" },
-    subtitle: { marginTop: 4, opacity: 0.7 },
+    title: { fontSize: 16, fontWeight: "800", color: "#121212" },
+    subtitle: { marginTop: 4, color: "#666666" },
+    actionsRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
+    favBtn: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 10 },
+    favText: { fontSize: 18, fontWeight: "900", color: "#121212" },
     image: { width: 72, height: 72 },
 });
